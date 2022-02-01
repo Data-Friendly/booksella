@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (ctx) => BookData()),
+        ChangeNotifierProvider(
+          create: (ctx) => BookData(),
+        ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          appBarTheme:
+              const AppBarTheme(color: Color.fromRGBO(238, 238, 238, 1)),
         ),
         home: HomeScreen(),
         routes: {

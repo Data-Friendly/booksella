@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
-  var screenwidth;
+  double screenwidth;
   Badge(this.screenwidth, {Key? key}) : super(key: key);
 
   @override

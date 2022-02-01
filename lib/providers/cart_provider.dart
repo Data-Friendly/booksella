@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:booksella/models/cartitem.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -43,9 +45,28 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  // function to create a random cart ID
+  String genrateRandomString(int length) {
+    return String.fromCharCodes(
+        List.generate(length, (index) => Random().nextInt(33) + 89));
+  }
+
   // add product to the cart
-  void addProductToCart() {
-    // ........
+  void addProductToCart(
+    String bookname,
+    int price,
+    String imageUrl,
+    int quantity,
+  ) {
+    CartItem _product = CartItem(
+      id: genrateRandomString(12),
+      imageUrl: imageUrl,
+      bookName: bookname,
+      price: price,
+      quantity: quantity,
+    );
+    _items[_product.id] = _product;
+    notifyListeners();
   }
 
   // delete all the items in cart
@@ -55,19 +76,19 @@ class Cart with ChangeNotifier {
   }
 
   // remove the specific item from cart
-  void removeItem(String productId) {
-    _items.removeWhere((key, value) => key == productId);
+  void removeItem(String carttId) {
+    _items.removeWhere((key, value) => key == carttId);
     notifyListeners();
   }
 
   // increase and decrease the number number of particaular item in cart
-  void increDecrementItemCount(bool val, String productId) {
+  void increDecrementItemCount(bool val, String cartId) {
     if (val == true) {
-      if (!_items.containsKey(productId)) {
-        addProductToCart();
-      } else if (_items[productId]!.quantity >= 1) {
+      if (!_items.containsKey(cartId)) {
+        return;
+      } else if (_items[cartId]!.quantity >= 1) {
         _items.update(
-          productId,
+          cartId,
           (existingValue) => CartItem(
             id: existingValue.id,
             imageUrl: existingValue.imageUrl,
@@ -78,11 +99,11 @@ class Cart with ChangeNotifier {
         );
       }
     } else if (val == false) {
-      if (!_items.containsKey(productId)) {
+      if (!_items.containsKey(cartId)) {
         return;
-      } else if (_items[productId]!.quantity > 1) {
+      } else if (_items[cartId]!.quantity > 1) {
         _items.update(
-          productId,
+          cartId,
           (existingValue) => CartItem(
             id: existingValue.id,
             imageUrl: existingValue.imageUrl,
@@ -92,7 +113,7 @@ class Cart with ChangeNotifier {
           ),
         );
       } else {
-        _items.remove(productId);
+        _items.remove(cartId);
       }
     }
     notifyListeners();

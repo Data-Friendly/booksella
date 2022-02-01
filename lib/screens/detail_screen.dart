@@ -1,10 +1,11 @@
 import 'package:booksella/providers/book_provider.dart';
 import 'package:booksella/models/book.dart';
+import 'package:booksella/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
-  var bookId;
+  String bookId;
 
   DetailScreen(this.bookId, {Key? key}) : super(key: key);
 
@@ -285,7 +286,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           IconButton(
                                               onPressed: () {
                                                 setState(() {
-                                                  counter--;
+                                                  counter = counter - 1;
                                                 });
                                               },
                                               icon: const Icon(
@@ -293,7 +294,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 color: Colors.grey,
                                               )),
                                           Text(
-                                            '${counter}',
+                                            '$counter',
                                             style: const TextStyle(
                                               fontSize: 16,
                                               color: Color.fromRGBO(
@@ -303,7 +304,17 @@ class _DetailScreenState extends State<DetailScreen> {
                                           IconButton(
                                               onPressed: () {
                                                 setState(() {
-                                                  counter++;
+                                                  counter = counter + 1;
+                                                  if (counter == 1) {
+                                                    Provider.of<Cart>(context,
+                                                            listen: false)
+                                                        .addProductToCart(
+                                                      bookidList[0].bookName,
+                                                      bookidList[0].price,
+                                                      bookidList[0].imageUrl,
+                                                      counter,
+                                                    );
+                                                  }
                                                 });
                                               },
                                               icon: const Icon(
@@ -315,18 +326,32 @@ class _DetailScreenState extends State<DetailScreen> {
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  height: screenHeight * 0.06,
-                                  width: screenWidth * 0.31,
-                                  child: const Center(
-                                    child: Text(
-                                      'Add to cart',
-                                      style: TextStyle(color: Colors.white),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      counter = counter + 1;
+                                    });
+                                    Provider.of<Cart>(context, listen: false)
+                                        .addProductToCart(
+                                      bookidList[0].bookName,
+                                      bookidList[0].price,
+                                      bookidList[0].imageUrl,
+                                      counter,
+                                    );
+                                  },
+                                  child: Container(
+                                    height: screenHeight * 0.06,
+                                    width: screenWidth * 0.31,
+                                    child: const Center(
+                                      child: Text(
+                                        'Add to cart',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
+                                    decoration: BoxDecoration(
+                                        color: Colors.orange[900],
+                                        borderRadius: BorderRadius.circular(5)),
                                   ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.orange[900],
-                                      borderRadius: BorderRadius.circular(5)),
                                 )
                               ],
                             ),

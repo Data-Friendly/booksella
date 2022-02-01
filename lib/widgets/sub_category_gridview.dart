@@ -70,15 +70,17 @@ class SuBCategoryGridView extends StatelessWidget {
                     style: const TextStyle(fontSize: 13, color: Colors.black),
                   ),
                 ),
-                Container(
-                  height: screenheight * 0.022,
-                  width: screenWidth * 0.26,
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Rs.' + gridList[index].price.toString(),
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 13,
+                Expanded(
+                  child: Container(
+                    // height: screenheight * 0.016,
+                    // width: screenWidth * 0.26,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Rs.' + gridList[index].price.toString(),
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 )

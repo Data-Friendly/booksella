@@ -1,47 +1,42 @@
-// dart packages
-// flutter packages
+import 'package:booksella/providers/datasearch.dart';
 import 'package:flutter/material.dart';
-// local packages
 
 class SearchBar extends StatelessWidget {
   const SearchBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        height: screenHeight * 0.06,
-        width: screenWidth * 0.9,
-        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 19),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Colors.grey[200],
-        ),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  screenWidth * 0.03, 0, screenWidth * 0.04, 0),
-              child: Icon(
-                Icons.search_rounded,
-                size: screenWidth * 0.07,
-                color: Colors.grey.shade600,
-              ),
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width * 0.9,
+      height: height * 0.057,
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 19),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(width * 0.03, 0, width * 0.04, 0),
+            child: IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: DataSearch());
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: width * 0.07,
+                )),
+          ),
+          const Text(
+            'Search',
+            style: TextStyle(
+              fontSize: 17,
+              color: Color.fromRGBO(106, 106, 106, 1),
             ),
-            Text(
-              "Search",
-              style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(width * 0.5),
+          color: const Color.fromRGBO(221, 221, 221, 1)),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Book {
   final String bookId;
   final String category;

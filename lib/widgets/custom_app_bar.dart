@@ -1,6 +1,8 @@
+import 'package:booksella/providers/book_provider.dart';
 import 'package:booksella/screens/cart_screen.dart';
-import 'package:booksella/screens/order_screen.dart';
+import 'package:booksella/widgets/notification_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -8,49 +10,50 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
+    var screenwidth = MediaQuery.of(context).size.width;
+    var bookdata = Provider.of<BookData>(context);
+    var count = bookdata.count;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-          15, MediaQuery.of(context).size.height * 0.02, 0, 0),
+    return SizedBox(
       height: screenHeight * 0.07,
       width: double.infinity,
-      // color: Colors.amber,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // side drawer navigator
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(OrderScreen.routeName);
-            },
-            icon: const Icon(
-              Icons.menu,
-              size: 30,
-            ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+                screenwidth * 0.03, 0, screenwidth * 0.53, 0),
+            child: count != 'HomeScreen'
+                ? IconButton(
+                    onPressed: () {
+                      // function that sets counts to 'HomeScreen'
+                      bookdata.setcount();
+                    },
+                    icon: Icon(Icons.arrow_back, size: screenwidth * 0.07))
+                : IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.menu,
+                      size: screenwidth * 0.09,
+                    ),
+                  ),
           ),
-          const SizedBox(
-            width: 180,
-          ),
-          // cart navigator
-          IconButton(
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, screenwidth * 0.02, 0),
+            child: IconButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(CartScreen.routeName);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.shopping_cart_outlined,
-                size: 30,
-              )),
-          // user profile image
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none_outlined,
-                size: 35,
+                size: screenwidth * 0.09,
               ),
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Badge(screenwidth),
+          ),
         ],
       ),
     );

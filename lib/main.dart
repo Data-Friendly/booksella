@@ -1,3 +1,4 @@
+import 'package:booksella/providers/book_provider.dart';
 import 'package:booksella/providers/cart_provider.dart';
 import 'package:booksella/providers/order_provider.dart';
 import 'package:booksella/screens/cart_screen.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (ctx) => BookData()),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomeScreen(),
+        home: HomeScreen(),
         routes: {
           CartScreen.routeName: (ctx) => const CartScreen(),
           OrderScreen.routeName: (ctx) => const OrderScreen()

@@ -4,9 +4,10 @@ import 'package:booksella/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class SuBCategoryGridView extends StatelessWidget {
-  var subCategory;
-  var category;
+  String subCategory;
+  String category;
   SuBCategoryGridView(this.subCategory, this.category, {Key? key})
       : super(key: key);
 

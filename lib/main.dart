@@ -4,6 +4,8 @@ import 'package:booksella/providers/order_provider.dart';
 import 'package:booksella/screens/cart_screen.dart';
 import 'package:booksella/screens/home_screen.dart';
 import 'package:booksella/screens/order_screen.dart';
+import 'package:booksella/screens/sign_in_screen.dart';
+import 'package:booksella/screens/sign_out_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:get/get.dart';
@@ -34,11 +36,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.grey,
           appBarTheme:
               const AppBarTheme(color: Color.fromRGBO(238, 238, 238, 1)),
         ),
-        home: HomeScreen(),
+        home: const SignInScreen(),
         routes: {
           CartScreen.routeName: (ctx) => const CartScreen(),
           OrderScreen.routeName: (ctx) => const OrderScreen()

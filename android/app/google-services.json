@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "366823448858",
+    "project_id": "booksella-3ce66",
+    "storage_bucket": "booksella-3ce66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366823448858:android:939276b9577303525f4ca3",
+        "android_client_info": {
+          "package_name": "com.example.booksella"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366823448858-k8p27qooq3qh42sss3datf4g7kr09ko1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzHKXu_f7irLyhYYKnBGfEpjalLloie78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366823448858-k8p27qooq3qh42sss3datf4g7kr09ko1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

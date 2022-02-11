@@ -1,10 +1,12 @@
-import 'package:booksella/screens/sign_out_screen.dart';
+import 'package:booksella/screens/sign_up_screen.dart';
 import 'package:booksella/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  SignInScreen(this.changeAuthScreens, {Key? key}) : super(key: key);
+  Function changeAuthScreens;
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -12,6 +14,8 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final formkey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
   final FocusNode emailfocusNode = FocusNode();
   final FocusNode passwordfocusNode = FocusNode();
   final TextEditingController emailAddress = TextEditingController();
@@ -30,13 +34,45 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   //validate and Sign In
-  void validateAndSignIn() {
-    formkey.currentState!.validate();
+  void validateAndSignIn() async {
+    UserCredential userCread;
+    setState(() {
+      _isLoading = true;
+    });
+    if (formkey.currentState!.validate()) {
+      try {
+        userCread = await _auth.signInWithEmailAndPassword(
+            email: emailAddress.text, password: password.text);
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (error) {
+        print(error.toString());
+      }
+    }
+  }
+
+  //validate and Sign in with google
+  void validateAndSignInWithGoogle() {
+    if (formkey.currentState!.validate()) {
+      try {
+        // Sign in with google
+      } catch (error) {
+        print(error.toString());
+      }
+    }
+  }
+
+  void resetPassword() {
+    try {
+      _auth.sendPasswordResetEmail(email: emailAddress.text);
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     emailfocusNode.dispose();
     password.dispose();
     super.dispose();
@@ -105,8 +141,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const SignOutScreen()));
+                        widget.changeAuthScreens();
                       },
                       child: Text(
                         'SignUp',
@@ -228,13 +263,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Text(
-                            'LogIn',
-                            style: GoogleFonts.lato(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: _isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'LogIn',
+                                  style: GoogleFonts.lato(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
                     ),

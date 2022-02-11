@@ -1,17 +1,17 @@
 import '../models/cartitem.dart';
 
-enum OrderStatus {
-  delivered,
-  cancelled,
-  yetToDeliver,
-}
+// enum OrderStatus {
+//   delivered,
+//   cancelled,
+//   yetToDeliver,
+// }
 
 class OrderItem {
   final String id;
   final int ammount;
   final List<CartItem> orderedProducts;
   final DateTime date;
-  final OrderStatus orderStatus;
+  final String orderStatus;
 
   OrderItem({
     required this.id,

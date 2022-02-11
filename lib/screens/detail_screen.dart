@@ -1,3 +1,4 @@
+import 'package:booksella/models/cartitem.dart';
 import 'package:booksella/providers/book_provider.dart';
 import 'package:booksella/models/book.dart';
 import 'package:booksella/providers/cart_provider.dart';

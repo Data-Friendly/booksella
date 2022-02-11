@@ -80,12 +80,12 @@ class _OrderDisplayState extends State<OrderDisplay> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (widget.myOrder.orderStatus == OrderStatus.delivered)
+                    if (widget.myOrder.orderStatus == "delivered")
                       StatusText('Deliverd',
                           const Color.fromRGBO(0, 176, 135, 10), 17),
-                    if (widget.myOrder.orderStatus == OrderStatus.cancelled)
+                    if (widget.myOrder.orderStatus == "cancelled")
                       StatusText('Cancelled', Colors.red, 17),
-                    if (widget.myOrder.orderStatus == OrderStatus.yetToDeliver)
+                    if (widget.myOrder.orderStatus == "yetToDeliver")
                       ElevatedButton(
                         onPressed: () {},
                         child: const Text(

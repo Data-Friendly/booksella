@@ -31,7 +31,10 @@ class CustomAppBar extends StatelessWidget {
                     },
                     icon: Icon(Icons.arrow_back, size: screenwidth * 0.07))
                 : IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<BookData>(context, listen: false)
+                          .fetchBookData();
+                    },
                     icon: Icon(
                       Icons.menu,
                       size: screenwidth * 0.09,

@@ -1,4 +1,6 @@
 import 'package:booksella/screens/order_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -23,6 +25,9 @@ class _BottomBarState extends State<BottomBar> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
+            if (index == 1) {
+              FirebaseAuth.instance.signOut();
+            }
             if (index == 2) {
               Navigator.of(context).pushNamed(OrderScreen.routeName);
             }

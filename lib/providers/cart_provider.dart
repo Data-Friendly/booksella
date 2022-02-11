@@ -1,35 +1,13 @@
 import 'dart:math';
 
 import 'package:booksella/models/cartitem.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class Cart with ChangeNotifier {
   // hold the items
-  final Map<String, CartItem> _items = {
-    'kafjhfjanfh': CartItem(
-      id: 'kafjhfjanfh',
-      bookName: "Digital Design",
-      price: 250,
-      imageUrl:
-          "https://images-na.ssl-images-amazon.com/images/I/51JEKC1uRtL.jpg",
-      quantity: 1,
-    ),
-    'faahklgflkag': CartItem(
-      id: 'faahklgflkag',
-      bookName: "Information Theory and Coding",
-      price: 845,
-      imageUrl: "https://www.e-booksdirectory.com/imglrg/1404.jpg",
-      quantity: 2,
-    ),
-    'kflahfjajfhafa': CartItem(
-      id: 'kflahfjajfhafa',
-      bookName: "VLSI",
-      price: 745,
-      imageUrl:
-          "https://rukminim1.flixcart.com/image/1664/1664/book/6/8/1/cmos-vlsi-design-original-imadg4yt2bnah4by.jpeg?q=90",
-      quantity: 4,
-    ),
-  };
+  Map<String, CartItem> _items = {};
 
   // get the cart items
   Map<String, CartItem> get items {
@@ -45,6 +23,28 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  // get the cartitems from database
+  void fetchCartItems() async {
+    QuerySnapshot<Map<String, dynamic>> cartData;
+    cartData = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("CartItem")
+        .get();
+    // create a map using cartData
+    Map<String, CartItem> cartItemsForParticularUser = {};
+    for (var i = 0; i < cartData.docs.length; i++) {
+      cartItemsForParticularUser[cartData.docs[i].id] = CartItem(
+          id: cartData.docs[i].id,
+          imageUrl: cartData.docs[i]["imageUrl"],
+          bookName: cartData.docs[i]["bookName"],
+          price: cartData.docs[i]["price"],
+          quantity: cartData.docs[i]["quantity"]);
+    }
+    _items = cartItemsForParticularUser;
+    notifyListeners();
+  }
+
   // function to create a random cart ID
   String genrateRandomString(int length) {
     return String.fromCharCodes(
@@ -57,7 +57,19 @@ class Cart with ChangeNotifier {
     int price,
     String imageUrl,
     int quantity,
-  ) {
+  ) async {
+    var _instance = FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("CartItem")
+        .doc(bookname);
+    await _instance.set({
+      'id': _instance.id,
+      'imageUrl': imageUrl,
+      'bookName': bookname,
+      'price': price,
+      'quantity': quantity,
+    });
     CartItem _product = CartItem(
       id: genrateRandomString(12),
       imageUrl: imageUrl,
@@ -70,7 +82,17 @@ class Cart with ChangeNotifier {
   }
 
   // delete all the items in cart
-  void deleteItem() {
+  void deleteItem() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("CartItem")
+        .get()
+        .then((snapshot) {
+      for (var document in snapshot.docs) {
+        document.reference.delete();
+      }
+    });
     _items.clear();
     notifyListeners();
   }
@@ -82,11 +104,17 @@ class Cart with ChangeNotifier {
   }
 
   // increase and decrease the number number of particaular item in cart
-  void increDecrementItemCount(bool val, String cartId) {
+  void increDecrementItemCount(bool val, String cartId) async {
+    var _instance = FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("CartItem");
     if (val == true) {
       if (!_items.containsKey(cartId)) {
         return;
       } else if (_items[cartId]!.quantity >= 1) {
+        await _instance.doc(_items[cartId]!.bookName).update(
+            <String, dynamic>{"quantity": _items[cartId]!.quantity + 1});
         _items.update(
           cartId,
           (existingValue) => CartItem(
@@ -102,6 +130,8 @@ class Cart with ChangeNotifier {
       if (!_items.containsKey(cartId)) {
         return;
       } else if (_items[cartId]!.quantity > 1) {
+        await _instance.doc(_items[cartId]!.bookName).update(
+            <String, dynamic>{"quantity": _items[cartId]!.quantity - 1});
         _items.update(
           cartId,
           (existingValue) => CartItem(
@@ -113,6 +143,7 @@ class Cart with ChangeNotifier {
           ),
         );
       } else {
+        await _instance.doc(_items[cartId]!.bookName).delete();
         _items.remove(cartId);
       }
     }

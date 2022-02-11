@@ -1,15 +1,20 @@
+import 'package:booksella/screens/sign_in_screen.dart';
 import 'package:booksella/widgets/text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignOutScreen extends StatefulWidget {
-  const SignOutScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignOutScreen> createState() => SignOutScreenState();
+  State<SignUpScreen> createState() => SignUpScreenState();
 }
 
-class SignOutScreenState extends State<SignOutScreen> {
+class SignUpScreenState extends State<SignUpScreen> {
+  bool _isLoading = false;
+  final _auth = FirebaseAuth.instance;
   final formkeySignUp = GlobalKey<FormState>();
   final FocusNode fullNameFocusNode = FocusNode();
   final FocusNode phoneNumberFocusNode = FocusNode();
@@ -64,8 +69,33 @@ class SignOutScreenState extends State<SignOutScreen> {
   }
 
   //validate and Sign up
-  void validateAndSignUp() {
-    formkeySignUp.currentState!.validate();
+  void validateAndSignUp() async {
+    UserCredential userCread;
+    setState(() {
+      _isLoading = true;
+    });
+    if (formkeySignUp.currentState!.validate()) {
+      try {
+        userCread = await _auth.createUserWithEmailAndPassword(
+            email: emailAddTextEditingController.text,
+            password: passwordTextEditingcontroller.text);
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCread.user!.uid)
+            .set({
+          'fullname': fullNametextEditingController.text,
+          'phone-no.': phoneNumberEditingController.text,
+          'address': addressTextEditingController.text,
+          'email': emailAddTextEditingController.text,
+        });
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (error) {
+        print(error.toString());
+      }
+    }
   }
 
   @override
@@ -89,14 +119,16 @@ class SignOutScreenState extends State<SignOutScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text(
-                  'SignIn',
-                  style: GoogleFonts.lato(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ))
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : Text(
+                        'SignIn',
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ))
           ],
         ),
       ),

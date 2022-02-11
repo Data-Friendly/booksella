@@ -45,7 +45,7 @@ class Order with ChangeNotifier {
             price: orderedProd.docs[j]["price"],
             quantity: orderedProd.docs[j]["quantity"]));
       }
-      print(tempOrderedList);
+
       // add the orderitem
       tempList.add(OrderItem(
         id: genrateRandomString(12).toUpperCase(),

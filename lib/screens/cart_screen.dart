@@ -1,10 +1,12 @@
-import 'package:booksella/models/cartitem.dart';
-import 'package:booksella/models/orderitem.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:booksella/providers/cart_provider.dart';
 import 'package:booksella/providers/order_provider.dart';
 import 'package:booksella/widgets/cart_display.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:toast/toast.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -15,8 +17,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  Razorpay? razorpay;
   bool _isinit = true;
   bool _isloading = true;
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -27,9 +31,67 @@ class _CartScreenState extends State<CartScreen> {
       _isloading = false;
     });
     _isinit = false;
+
     // did change dipendencies run many times we do not want that shit to happen
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    razorpay = Razorpay();
+    razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, PaymentSuccessHandler);
+    razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, PaymentFaliureHandler);
+    razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, ExternalWalletHandler);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    razorpay!.clear();
+    super.dispose();
+  }
+
+  // open checkout
+  void openCheckout(BuildContext context) async {
+    var options = {
+      "key": "rzp_test_fCcGUp6jebfTG4",
+      "amount": (Provider.of<Cart>(context, listen: false).totalAmount) * 100,
+      "name": "booksella",
+      "description": "Payment for books set",
+      "prefill": {
+        "contact": await Provider.of<Cart>(context, listen: false)
+            .phoneNumber("phone"),
+        "email": await Provider.of<Cart>(context, listen: false)
+            .phoneNumber("email"),
+      },
+      "external": {
+        "wallets": ["paytm", "phonepe", "amazonpay"]
+      }
+    };
+
+    try {
+      razorpay!.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // payment sucess handler
+  void PaymentSuccessHandler() {
+    print("payment Successs");
+  }
+
+  // payment faliure handler
+  void PaymentFaliureHandler() {
+    print(
+      "payment Failed",
+    );
+  }
+
+  // payment sucess handler
+  void ExternalWalletHandler() {
+    print("External Wallet");
   }
 
   @override
@@ -149,7 +211,8 @@ class _CartScreenState extends State<CartScreen> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.orange[900]),
-                              onPressed: () {
+                              onPressed: () async {
+                                openCheckout(context);
                                 Provider.of<Order>(context, listen: false)
                                     .addOrders(
                                   cartitems.totalAmount,

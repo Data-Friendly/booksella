@@ -149,4 +149,22 @@ class Cart with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // get the details for the user
+  Future<dynamic> phoneNumber(String get) async {
+    var userData = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    var phone = userData.data()!["phone-no."];
+    var email = userData.data()!["email"];
+
+    if (get == "phone") {
+      return phone;
+    } else if (get == "email") {
+      return email;
+    }
+    return 0;
+  }
 }

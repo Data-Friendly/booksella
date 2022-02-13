@@ -130,17 +130,10 @@ class CartDisplay extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // SizedBox(
-                  //   height: totalHeight * 0.15 * 0.02,
-                  // ),
                   Container(
                     margin: const EdgeInsets.all(0),
                     padding: EdgeInsets.only(
-                        top: totalHeight * 0.15 * 0.02, left: 0),
-                    // color: Colors.yellow,
-                    // margin:
-                    // EdgeInsets.fromLTRB(0, totalHeight * 0.15 * 0.03, 0, 0),
+                        top: totalHeight * 0.15 * 0.017, left: 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

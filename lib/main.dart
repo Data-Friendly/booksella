@@ -6,6 +6,7 @@ import 'package:booksella/screens/cart_screen.dart';
 import 'package:booksella/screens/home_screen.dart';
 import 'package:booksella/screens/order_screen.dart';
 import 'package:booksella/screens/sign_in_screen.dart';
+// import 'package:booksella/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           CartScreen.routeName: (ctx) => const CartScreen(),
-          OrderScreen.routeName: (ctx) => const OrderScreen()
+          OrderScreen.routeName: (ctx) => const OrderScreen(),
+          // UserProfile.routeName: (ctx) => const UserProfile(),
         },
       ),
     );

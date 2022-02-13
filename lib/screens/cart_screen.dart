@@ -37,6 +37,23 @@ class _CartScreenState extends State<CartScreen> {
     super.didChangeDependencies();
   }
 
+  // payment sucess handler
+  void PaymentSuccessHandler() {
+    print("payment Successs");
+  }
+
+  // payment faliure handler
+  void PaymentFaliureHandler() {
+    print(
+      "payment Failed",
+    );
+  }
+
+  // payment sucess handler
+  void ExternalWalletHandler() {
+    print("External Wallet");
+  }
+
   @override
   void initState() {
     razorpay = Razorpay();
@@ -60,10 +77,10 @@ class _CartScreenState extends State<CartScreen> {
       "name": "booksella",
       "description": "Payment for books set",
       "prefill": {
-        "contact": await Provider.of<Cart>(context, listen: false)
-            .phoneNumber("phone"),
-        "email": await Provider.of<Cart>(context, listen: false)
-            .phoneNumber("email"),
+        "contact":
+            await Provider.of<Cart>(context, listen: false).userInfo("phone"),
+        "email":
+            await Provider.of<Cart>(context, listen: false).userInfo("email"),
       },
       "external": {
         "wallets": ["paytm", "phonepe", "amazonpay"]
@@ -73,25 +90,25 @@ class _CartScreenState extends State<CartScreen> {
     try {
       razorpay!.open(options);
     } catch (e) {
-      print(e.toString());
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("payment falied"),
+          content: Text("payment failed due to ${e.toString()}"),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromRGBO(0, 176, 135, 10),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+              child: const Text("ok"),
+            )
+          ],
+        ),
+      );
     }
-  }
-
-  // payment sucess handler
-  void PaymentSuccessHandler() {
-    print("payment Successs");
-  }
-
-  // payment faliure handler
-  void PaymentFaliureHandler() {
-    print(
-      "payment Failed",
-    );
-  }
-
-  // payment sucess handler
-  void ExternalWalletHandler() {
-    print("External Wallet");
   }
 
   @override
@@ -139,23 +156,20 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                          itemCount: cartitems.items.length,
-                          itemBuilder: (ctx, index) {
-                            return CartDisplay(
-                              id: cartitems.items.values.toList()[index].id,
-                              imageUrl: cartitems.items.values
-                                  .toList()[index]
-                                  .imageUrl,
-                              bookName: cartitems.items.values
-                                  .toList()[index]
-                                  .bookName,
-                              price:
-                                  cartitems.items.values.toList()[index].price,
-                              quantity: cartitems.items.values
-                                  .toList()[index]
-                                  .quantity,
-                            );
-                          }),
+                        itemCount: cartitems.items.length,
+                        itemBuilder: (ctx, index) {
+                          return CartDisplay(
+                            id: cartitems.items.values.toList()[index].id,
+                            imageUrl:
+                                cartitems.items.values.toList()[index].imageUrl,
+                            bookName:
+                                cartitems.items.values.toList()[index].bookName,
+                            price: cartitems.items.values.toList()[index].price,
+                            quantity:
+                                cartitems.items.values.toList()[index].quantity,
+                          );
+                        },
+                      ),
                     ),
                     Container(
                       decoration: const BoxDecoration(

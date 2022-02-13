@@ -17,13 +17,13 @@ class SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
   final formkeySignUp = GlobalKey<FormState>();
   final FocusNode fullNameFocusNode = FocusNode();
-  final FocusNode phoneNumberFocusNode = FocusNode();
+  final FocusNode userInfoFocusNode = FocusNode();
   final FocusNode addressFocusNode = FocusNode();
   final FocusNode emailAddFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode confirmPasswordFocusNode = FocusNode();
   TextEditingController fullNametextEditingController = TextEditingController();
-  TextEditingController phoneNumberEditingController = TextEditingController();
+  TextEditingController userInfoEditingController = TextEditingController();
   TextEditingController addressTextEditingController = TextEditingController();
   TextEditingController emailAddTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingcontroller = TextEditingController();
@@ -34,7 +34,7 @@ class SignUpScreenState extends State<SignUpScreen> {
     fullNameFocusNode.addListener(() {
       callSetsState();
     });
-    phoneNumberFocusNode.addListener(() {
+    userInfoFocusNode.addListener(() {
       callSetsState();
     });
     addressFocusNode.addListener(() {
@@ -60,7 +60,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     // TODO: implement dispose
     fullNameFocusNode.dispose();
-    phoneNumberFocusNode.dispose();
+    userInfoFocusNode.dispose();
     addressFocusNode.dispose();
     emailAddFocusNode.dispose();
     passwordFocusNode.dispose();
@@ -85,7 +85,7 @@ class SignUpScreenState extends State<SignUpScreen> {
             .doc(userCread.user!.uid)
             .set({
           'fullname': fullNametextEditingController.text,
-          'phone-no.': phoneNumberEditingController.text,
+          'phone-no.': userInfoEditingController.text,
           'address': addressTextEditingController.text,
           'email': emailAddTextEditingController.text,
         });
@@ -199,11 +199,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                         height: screenHeight * 0.013,
                       ),
                       InputTextFormField(
-                          'Phonenumber',
+                          'userInfo',
                           const Icon(Icons.phone_android),
-                          phoneNumberFocusNode,
+                          userInfoFocusNode,
                           false,
-                          phoneNumberEditingController, (value) {
+                          userInfoEditingController, (value) {
                         String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
                         RegExp regExp = RegExp(pattern);
                         if (value!.isEmpty) {

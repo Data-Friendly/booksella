@@ -1,6 +1,6 @@
 import 'package:booksella/screens/order_screen.dart';
+// import 'package:booksella/screens/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -49,14 +49,14 @@ class _BottomBarState extends State<BottomBar> {
                 size: width * 0.08,
               )),
           BottomNavigationBarItem(
-              label: 'Track',
+              label: 'Log Out',
               icon: Icon(
-                Icons.fmd_good_outlined,
+                Icons.exit_to_app,
                 size: width * 0.08,
               )),
           BottomNavigationBarItem(
-              label: 'User',
-              icon: Icon(Icons.account_circle_outlined, size: width * 0.08)),
+              label: 'My Orders',
+              icon: Icon(Icons.list_alt, size: width * 0.08)),
         ],
       ),
     );

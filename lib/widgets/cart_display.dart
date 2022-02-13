@@ -133,7 +133,7 @@ class CartDisplay extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(0),
                     padding: EdgeInsets.only(
-                        top: totalHeight * 0.15 * 0.017, left: 0),
+                        top: totalHeight * 0.15 * 0.01, left: 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
